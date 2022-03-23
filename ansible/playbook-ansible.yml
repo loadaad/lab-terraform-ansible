@@ -1,0 +1,22 @@
+---
+- name: Installation de paquets de base
+  hosts: master
+  become: yes
+  tasks:
+  - name: Installation des paquets
+    apt: name={{ item }} state=latest
+    with_items:
+      - python
+      - python3
+      - vim
+
+  - name: Alias python
+    lineinfile:
+      path: /root/.bashrc
+      regexp: '^alias python='
+      line: alias python=python3
+      state: present
+      insertafter: EOF
+      create: True
+      owner: root
+
