@@ -1,0 +1,17 @@
+---
+- name: Deploy app
+  hosts: master
+  become: yes
+  tasks:
+  - name: copy Docker Compose files
+    copy:
+      src: ../apps/streamlit-app
+      dest: /home/project/streamlit-app
+
+  - name: deploy Docker Compose stack
+    shell: cd /home/project/streamlit-app && docker-compose up -d --build
+    # docker_compose:
+    #   project_src: /home/project/streamlit-app
+    #   build: yes
+    #   files:
+    #   - docker-compose.yml

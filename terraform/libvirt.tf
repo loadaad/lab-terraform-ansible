@@ -2,7 +2,7 @@
 resource "libvirt_volume" "os_image" {
   name = "${var.hostname}-os_image"
   pool = "default"
-  source = "bionic-server-cloudimg-amd64.img"
+  source = "../bionic-server-cloudimg-amd64.img"
   format = "qcow2"
 }
 
@@ -33,7 +33,7 @@ data "template_cloudinit_config" "config" {
 resource "libvirt_pool" "default" {
   name = "default1"
   type = "dir"
-  path = "/tmp/kvm"
+  path = "/home/vm"
 }
 
 # Use CloudInit to add the instance
@@ -47,7 +47,7 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 
 # Define KVM domain to create
 resource "libvirt_domain" "ubuntu" {
-  name   = "ubuntu.16.04"
+  name   = "ubuntu.18.04"
   memory = "2048"
   vcpu   = 2
 
@@ -77,5 +77,5 @@ resource "libvirt_domain" "ubuntu" {
 
 # Output Server IP
 output "ip" {
-  value = "${libvirt_domain.ubuntu.network_interface.0.addresses}"
+  value = "${libvirt_domain.ubuntu.network_interface.*.addresses.0}"
 }
